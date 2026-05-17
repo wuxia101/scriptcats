@@ -1,0 +1,49 @@
+---
+title: 安装脚本
+---
+
+> 请先参考 [快速开始](/docs/use/use/) 安装脚本猫扩展。
+
+## 从各大网站安装步骤
+
+### 脚本猫社区
+
+[脚本猫社区](https://scriptcat.org/search) 脚本猫官方站点
+
+### Userscript.Zone
+
+[Userscript.Zone](https://www.userscript.zone/) 是一个新网站，允许通过输入合适的 URL 或域来搜索用户脚本。
+
+- **大量的脚本资源**
+- **很容易找到合适的用户脚本**
+- **仅显示受审核的用户脚本页面或至少具有注释功能的页面中的用户脚本**
+
+### GreasyFork
+
+[GreasyFork](https://greasyfork.org/) 是一个广泛使用的用户脚本（userscript）分享与托管平台，提供开发者发布和用户安装各类浏览器脚本。该网站由 Jason Barnabe 创建，并以注重安全性与开源透明为特点，收录了大量可用于扩展网站功能或改善浏览体验的脚本资源。
+
+Jason Barnabe 同时也是 Stylish 浏览器扩展的原作者。不过，[Stylish](https://userstyles.org/) 已于 2016 年转手并由其他公司运营，之后的发展与 Jason Barnabe 已无直接关联。
+
+- **大量的脚本资源**
+- **拥有可以从 Github 中进行脚本同步的功能**
+- **非常活跃的开放源代码发展模式**
+
+### OpenUserJS
+
+[OpenUserJS](https://openuserjs.org/) 是在 GreasyFork 之后开始创办的。它由 Sizzle McTwizzle 创建，同样地，在其储存库中也拥有大量的脚本资源。
+
+- **拥有可以从 Github、fork scripts 中进行脚本同步的功能**
+- **非常活跃的开放源代码发展模式**
+
+### GitHub/要点
+
+你可以在 Github 和 Gist 中搜索脚本资源。
+
+## 手动安装脚本
+
+1. 点击脚本猫扩展图标
+2. 点击界面中的“齿轮按钮”进入脚本猫管理界面
+3. 点击右上角“新建新脚本”按钮 （一般新建普通脚本即可）
+4. 在弹出的页面中粘贴脚本代码
+5. 按下 `ctrl + s` 保存更改
+6. 返回管理界面即可看到你新建的脚本
