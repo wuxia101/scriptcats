@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ScriptCat 自动生成描述助手
 // @namespace    https://scriptcat.org/
-// @version      0.4.0
+// @version      0.4.1
 // @description  在 ScriptCat 发布脚本时，自动根据脚本代码生成描述和更新日志
 // @author       wuxia
 // @match        https://scriptcat.org/**/scripts/create*
