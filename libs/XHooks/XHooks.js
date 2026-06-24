@@ -10,7 +10,7 @@
  * 依赖: XUtils（需在 window 对象上预先绑定）
  *
  * @version 1.0.0
- * @author tianyuanfeng
+ * @author wuxia
  * @license MIT
  */
 

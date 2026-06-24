@@ -9,7 +9,7 @@
  * - 一次性函数、异步/Promise 检测
  *
  * @version 1.0.0
- * @author tianyuanfeng
+ * @author wuxia
  * @license MIT
  */
 
