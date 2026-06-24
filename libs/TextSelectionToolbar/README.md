@@ -2,25 +2,27 @@
 
 ## 目录
 
-- [功能介绍](#功能介绍)
-- [核心特性](#核心特性)
-- [使用方法](#使用方法)
-  - [脚本猫](#脚本猫)
-  - [基础引入](#基础引入)
-  - [基础示例](#基础示例)
-  - [使用 SVG 图标](#使用-svg-图标)
-  - [事件监听](#事件监听)
-  - [销毁工具栏](#销毁工具栏)
-- [配置选项](#配置选项)
-- [API 方法](#api-方法)
-  - [按钮管理](#按钮管理)
-  - [状态控制](#状态控制)
-  - [事件系统](#事件系统)
-  - [生命周期](#生命周期)
-- [按钮配置](#按钮配置)
-- [支持的事件](#支持的事件)
-- [样式定制](#样式定制)
-- [浏览器兼容](#浏览器兼容)
+- [TextSelectionToolbar - 文本选择工具栏组件](#textselectiontoolbar---文本选择工具栏组件)
+  - [目录](#目录)
+  - [功能介绍](#功能介绍)
+  - [核心特性](#核心特性)
+  - [使用方法](#使用方法)
+    - [脚本猫](#脚本猫)
+    - [基础引入](#基础引入)
+    - [基础示例](#基础示例)
+    - [使用 SVG 图标](#使用-svg-图标)
+    - [事件监听](#事件监听)
+    - [销毁工具栏](#销毁工具栏)
+  - [配置选项](#配置选项)
+  - [API 方法](#api-方法)
+    - [按钮管理](#按钮管理)
+    - [状态控制](#状态控制)
+    - [事件系统](#事件系统)
+    - [生命周期](#生命周期)
+  - [按钮配置](#按钮配置)
+  - [支持的事件](#支持的事件)
+  - [样式定制](#样式定制)
+  - [浏览器兼容](#浏览器兼容)
 
 ---
 
@@ -46,7 +48,7 @@ TextSelectionToolbar 是一个纯 JavaScript 编写的文本选择工具栏组�
 // ==UserScript==
 // @grant       GM_xmlhttpRequest
 // @connect     *
-// @require     https://scriptcat.org/lib/4521/1.0.0/WebDAVClient.js?sha384-H3wUQ1kAa17QQ2r8YgdyAyJbQRuk9zm9e0dejIiiHAt2frfUwsSxOLOqsmOCiYIV
+// @require     https://scriptcat.org/lib/6768/1.0.0/TextSelectionToolbar.js?sha384-WVTzTsZix4/JgD+wbudfVZ0syXZxB6LJQEosxUo0E2YLFuK2nAwLgAxheAWxeP5Q
 // ==/UserScript==
 
 (function () {

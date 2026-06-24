@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ContextMenu.js - 右键上下文菜单组件演示</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      color: #e8eaed;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #5c9cf5, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #8b919a;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+
+    .demo-section {
+      background: rgba(30, 30, 40, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(100, 120, 160, 0.2);
+    }
+
+    .demo-section h2 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      color: #5c9cf5;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-section h2::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: #5c9cf5;
+      border-radius: 2px;
+    }
+
+    .demo-box {
+      background: rgba(20, 20, 30, 0.8);
+      border-radius: 12px;
+      padding: 60px 40px;
+      text-align: center;
+      border: 2px dashed rgba(100, 120, 160, 0.3);
+      transition: all 0.3s;
+      cursor: context-menu;
+    }
+
+    .demo-box:hover {
+      border-color: rgba(92, 156, 245, 0.5);
+      background: rgba(25, 25, 40, 0.9);
+    }
+
+    .demo-box .icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .demo-box p {
+      color: #8b919a;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .feature-card {
+      background: rgba(20, 20, 30, 0.6);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(100, 120, 160, 0.15);
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(92, 156, 245, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .feature-card .icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #e8eaed;
+    }
+
+    .feature-card p {
+      font-size: 0.85rem;
+      color: #8b919a;
+    }
+
+    .code-block {
+      background: #0d1117;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      overflow-x: auto;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .code-block code {
+      color: #c9d1d9;
+    }
+
+    .code-block .keyword {
+      color: #ff7b72;
+    }
+
+    .code-block .string {
+      color: #a5d6ff;
+    }
+
+    .code-block .comment {
+      color: #8b949e;
+    }
+
+    .code-block .function {
+      color: #d2a8ff;
+    }
+
+    .code-block .property {
+      color: #79c0ff;
+    }
+
+    .shortcuts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .shortcut-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(20, 20, 30, 0.6);
+      padding: 12px 15px;
+      border-radius: 8px;
+    }
+
+    .shortcut-key {
+      background: rgba(92, 156, 245, 0.2);
+      color: #5c9cf5;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      font-family: monospace;
+    }
+
+    .shortcut-desc {
+      color: #c9d1d9;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(100, 120, 160, 0.2);
+      color: #8b919a;
+    }
+
+    footer a {
+      color: #5c9cf5;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(30, 30, 35, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(100, 120, 160, 0.3);
+      border-radius: 10px;
+      padding: 15px 25px;
+      color: #e8eaed;
+      font-size: 0.95rem;
+      opacity: 0;
+      transition: all 0.3s ease-out;
+      z-index: 9999;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success {
+      border-color: rgba(72, 199, 142, 0.5);
+    }
+
+    .toast.success::before {
+      content: '✓ ';
+      color: #48c78e;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ContextMenu.js</h1>
+    <p class="subtitle">轻量级、可扩展的右键上下文菜单组件库 · 原生JavaScript实现</p>
+
+    <!-- 主要演示区域 -->
+    <div class="demo-section">
+      <h2>右键点击下方区域</h2>
+      <div class="demo-box" id="demo-box">
+        <div class="icon">👆</div>
+        <p>在此区域<strong>点击右键</strong>体验自定义菜单</p>
+      </div>
+    </div>
+
+    <!-- 功能特点 -->
+    <div class="demo-section">
+      <h2>功能特点</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="icon">🎯</div>
+          <h3>完全替换原生菜单</h3>
+          <p>拦截浏览器原生右键事件，显示自定义菜单</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📦</div>
+          <h3>零依赖</h3>
+          <p>纯原生JavaScript实现，无需任何外部库</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔗</div>
+          <h3>支持子菜单</h3>
+          <p>可嵌套多级子菜单，自动处理边界溢出</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">⌨️</div>
+          <h3>快捷键支持</h3>
+          <p>显示快捷键提示，支持键盘导航</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🎨</div>
+          <h3>丰富样式</h3>
+          <p>现代暗色玻璃态设计，流畅动画</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔧</div>
+          <h3>灵活配置</h3>
+          <p>支持禁用、动态显示、回调函数等</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 键盘快捷键 -->
+    <div class="demo-section">
+      <h2>键盘支持</h2>
+      <div class="shortcuts-grid">
+        <div class="shortcut-item">
+          <span class="shortcut-key">Esc</span>
+          <span class="shortcut-desc">关闭菜单</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">↑ / ↓</span>
+          <span class="shortcut-desc">上下导航</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">Enter</span>
+          <span class="shortcut-desc">执行选中项</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">→</span>
+          <span class="shortcut-desc">打开子菜单</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="shortcut-key">←</span>
+          <span class="shortcut-desc">返回上级</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 使用示例 -->
+    <div class="demo-section">
+      <h2>快速开始</h2>
+      <div class="code-block">
+        <code><span class="comment">// 引入组件</span>
+<span class="keyword">&lt;script src</span>=<span class="string">"ContextMenu.js"</span><span class="keyword">&gt;&lt;/script&gt;</span>
+
+<span class="comment">// 创建菜单实例</span>
+<span class="keyword">const</span> menu = <span class="keyword">new</span> <span class="function">ContextMenu</span>();
+
+<span class="comment">// 注册菜单项</span>
+menu.<span class="function">register</span>({
+  <span class="property">id</span>: <span class="string">'copy'</span>,
+  <span class="property">text</span>: <span class="string">'复制'</span>,
+  <span class="property">icon</span>: <span class="string">'📋'</span>,
+  <span class="property">shortcut</span>: <span class="string">'Ctrl+C'</span>,
+  <span class="property">onClick</span>: (info) => {
+    console.<span class="function">log</span>(<span class="string">'选中文本:'</span>, info.selectionText);
+  }
+});
+
+<span class="comment">// 添加分隔线</span>
+menu.<span class="function">divider</span>();
+
+<span class="comment">// 添加子菜单</span>
+menu.<span class="function">submenu</span>(<span class="string">'更多操作'</span>, (sub) => {
+  sub.<span class="function">register</span>({ <span class="property">id</span>: <span class="string">'setting'</span>, <span class="property">text</span>: <span class="string">'设置'</span> });
+  sub.<span class="function">register</span>({ <span class="property">id</span>: <span class="string">'help'</span>, <span class="property">text</span>: <span class="string">'帮助'</span> });
+});
+
+<span class="comment">// 链式调用</span>
+menu
+  .<span class="function">register</span>({ <span class="property">id</span>: <span class="string">'save'</span>, <span class="property">text</span>: <span class="string">'保存'</span> })
+  .<span class="function">register</span>({ <span class="property">id</span>: <span class="string">'print'</span>, <span class="property">text</span>: <span class="string">'打印'</span> })
+  .<span class="function">divider</span>()
+  .<span class="function">register</span>({ <span class="property">id</span>: <span class="string">'exit'</span>, <span class="property">text</span>: <span class="string">'退出'</span> });</code>
+      </div>
+    </div>
+
+    <!-- 进阶用法 -->
+    <div class="demo-section">
+      <h2>进阶功能</h2>
+      <div class="code-block">
+        <code><span class="comment">// 条件显示 - 根据选中内容显示不同选项</span>
+menu.<span class="function">register</span>({
+  <span class="property">id</span>: <span class="string">'search'</span>,
+  <span class="property">text</span>: <span class="string">'搜索选中内容'</span>,
+  <span class="property">visible</span>: (info) => info.selectionText.length > <span class="string">0</span>,
+  <span class="property">onClick</span>: (info) => {
+    window.<span class="function">open</span>(<span class="string">`https://www.google.com/search?q=</span>${info.selectionText}<span class="string">`</span>);
+  }
+});
+
+<span class="comment">// 动态禁用 - 根据状态禁用菜单项</span>
+menu.<span class="function">register</span>({
+  <span class="property">id</span>: <span class="string">'paste'</span>,
+  <span class="property">text</span>: <span class="string">'粘贴'</span>,
+  <span class="property">disabled</span>: <span class="keyword">true</span>, <span class="comment">// 初始禁用</span>
+  <span class="property">onClick</span>: async (info) => {
+    <span class="keyword">const</span> text = <span class="keyword">await</span> menu.<span class="function">getClipboardText</span>();
+    console.<span class="function">log</span>(<span class="string">'粘贴内容:'</span>, text);
+  }
+});
+
+<span class="comment">// 动态更新菜单项</span>
+menu.<span class="function">update</span>(<span class="string">'paste'</span>, { <span class="property">disabled</span>: <span class="keyword">false</span> });
+
+<span class="comment">// 移除菜单项</span>
+menu.<span class="function">remove</span>(<span class="string">'old-item'</span>);
+
+<span class="comment">// 清空菜单</span>
+menu.<span class="function">clear</span>();
+
+<span class="comment">// 销毁实例</span>
+menu.<span class="function">destroy</span>();</code>
+      </div>
+    </div>
+
+    <footer>
+      <p>ContextMenu.js · MIT License · 使用原生JavaScript构建</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./ContextMenu.js"></script>
+  <script>
+    // 创建右键菜单实例
+    const menu = new ContextMenu();
+
+    // 注册主菜单项
+    menu.register({
+      id: 'copy',
+      text: '复制',
+      icon: '📋',
+      shortcut: 'Ctrl+C',
+      onClick: (info) => {
+        if (info.selectionText) {
+          copyToClipboard(info.selectionText);
+          showToast('已复制: ' + info.selectionText.substring(0, 30) + (info.selectionText.length > 30 ? '...' : ''));
+        } else {
+          showToast('请先选择文本');
+        }
+      }
+    });
+
+    menu.register({
+      id: 'cut',
+      text: '剪切',
+      icon: '✂️',
+      shortcut: 'Ctrl+X',
+      visible: (info) => info.selectionText.length > 0,
+      onClick: () => {
+        showToast('剪切功能');
+      }
+    });
+
+    menu.register({
+      id: 'paste',
+      text: '粘贴',
+      icon: '📄',
+      shortcut: 'Ctrl+V',
+      disabled: false,
+      onClick: async (info) => {
+        const text = await menu.getClipboardText();
+        showToast('粘贴: ' + (text || '(剪贴板为空)'));
+      }
+    });
+
+    menu.divider();
+
+    // 子菜单示例
+    menu.submenu('分享到', (sub) => {
+      sub.register({
+        id: 'share-wechat',
+        text: '微信',
+        icon: '💬',
+        onClick: () => showToast('分享到微信')
+      });
+      sub.register({
+        id: 'share-weibo',
+        text: '微博',
+        icon: '🌐',
+        onClick: () => showToast('分享到微博')
+      });
+      sub.register({
+        id: 'share-qq',
+        text: 'QQ',
+        icon: '🐧',
+        onClick: () => showToast('分享到QQ')
+      });
+      sub.divider();
+      sub.submenu('更多平台', (nested) => {
+        nested.register({
+          id: 'share-twitter',
+          text: 'Twitter',
+          icon: '🐦',
+          onClick: () => showToast('分享到Twitter')
+        });
+        nested.register({
+          id: 'share-facebook',
+          text: 'Facebook',
+          icon: '📘',
+          onClick: () => showToast('分享到Facebook')
+        });
+      });
+    });
+
+    menu.divider();
+
+    menu.register({
+      id: 'search',
+      text: '搜索选中内容',
+      icon: '🔍',
+      shortcut: 'Ctrl+F',
+      visible: (info) => info.selectionText.length > 0,
+      onClick: (info) => {
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(info.selectionText)}`, '_blank');
+      }
+    });
+
+    menu.register({
+      id: 'translate',
+      text: '翻译',
+      icon: '🌏',
+      visible: (info) => info.selectionText.length > 0,
+      onClick: (info) => {
+        window.open(`https://translate.google.com/?sl=auto&tl=zh-CN&text=${encodeURIComponent(info.selectionText)}`, '_blank');
+      }
+    });
+
+    menu.divider();
+
+    // 链接相关
+    menu.register({
+      id: 'open-link',
+      text: '在新标签页打开链接',
+      icon: '🔗',
+      visible: (info) => !!info.href,
+      onClick: (info) => {
+        if (info.href) {
+          window.open(info.href, '_blank');
+          showToast('打开链接: ' + info.href);
+        }
+      }
+    });
+
+    menu.register({
+      id: 'copy-link',
+      text: '复制链接地址',
+      icon: '🔗',
+      visible: (info) => !!info.href,
+      onClick: (info) => {
+        if (info.href) {
+          copyToClipboard(info.href);
+          showToast('已复制链接');
+        }
+      }
+    });
+
+    menu.divider();
+
+    menu.register({
+      id: 'select-all',
+      text: '全选',
+      icon: '☑️',
+      shortcut: 'Ctrl+A',
+      onClick: () => {
+        document.execCommand('selectAll');
+        showToast('已全选');
+      }
+    });
+
+    menu.register({
+      id: 'view-source',
+      text: '查看页面源代码',
+      icon: '📜',
+      onClick: () => {
+        window.open('view-source:' + window.location.href, '_blank');
+      }
+    });
+
+    menu.divider();
+
+    menu.register({
+      id: 'refresh',
+      text: '刷新页面',
+      icon: '🔄',
+      shortcut: 'F5',
+      onClick: () => {
+        location.reload();
+      }
+    });
+
+    // 辅助函数
+    function copyToClipboard(text) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast success show';
+      setTimeout(() => {
+        toast.className = 'toast';
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

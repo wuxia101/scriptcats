@@ -2,30 +2,32 @@
 
 ## 目录
 
-- [简介](#简介)
-- [特性](#特性)
-- [依赖](#依赖)
-- [安装与引入](#安装与引入)
-  - [脚本猫](#脚本猫)
-  - [直接引入](#直接引入)
-  - [Node.js](#nodejs)
-  - [AMD](#amd)
-- [快速开始](#快速开始)
-- [Hook 机制说明](#hook-机制说明)
-  - [前置处理（pre）](#前置处理pre)
-  - [后置处理（post）](#后置处理post)
-  - [日志开关](#日志开关)
-- [API 参考](#api-参考)
-  - [hookJSONParse](#hookjsonparse)
-  - [hookJSONStringify](#hookjsonstringify)
-  - [hookFetch](#hookfetch)
-  - [hookXMLHttpRequest](#hookxmlhttprequest)
-  - [hookPromise](#hookpromise)
-  - [hookWebAPI](#hookwebapi)
-- [注意事项](#注意事项)
-- [浏览器兼容](#浏览器兼容)
-- [版本历史](#版本历史)
-- [许可证](#许可证)
+- [XHooks - Web API Hook 工具库](#xhooks---web-api-hook-工具库)
+  - [目录](#目录)
+  - [简介](#简介)
+  - [特性](#特性)
+  - [依赖](#依赖)
+  - [安装与引入](#安装与引入)
+    - [脚本猫](#脚本猫)
+    - [直接引入](#直接引入)
+    - [Node.js](#nodejs)
+    - [AMD](#amd)
+  - [快速开始](#快速开始)
+  - [Hook 机制说明](#hook-机制说明)
+    - [前置处理（pre）](#前置处理pre)
+    - [后置处理（post）](#后置处理post)
+    - [日志开关](#日志开关)
+  - [API 参考](#api-参考)
+    - [hookJSONParse](#hookjsonparse)
+    - [hookJSONStringify](#hookjsonstringify)
+    - [hookFetch](#hookfetch)
+    - [hookXMLHttpRequest](#hookxmlhttprequest)
+    - [hookPromise](#hookpromise)
+    - [hookWebAPI](#hookwebapi)
+  - [注意事项](#注意事项)
+  - [浏览器兼容](#浏览器兼容)
+  - [版本历史](#版本历史)
+  - [许可证](#许可证)
 
 ---
 
@@ -64,8 +66,8 @@ XHooks 依赖 [XUtils](../XUtils/README.md) 库，需确保在引入 XHooks 之�
 ```javascript
 // ==UserScript==
 // @name         我的脚本
-// @require      https://scriptcat.org/lib/xxxx/XUtils.js
-// @require      https://scriptcat.org/lib/xxxx/XHooks.js
+// @require      https://scriptcat.org/lib/6770/1.0.0/XUtils.js?sha384-Uudf4p/9d0W2IhaoC95ImRHTjcdQKST50ro2T7bPCotjEmhj9lzAYipOAAcFd+sY
+// @require https://scriptcat.org/lib/6771/1.0.0/XHooks.js?sha384-cBXG++PqfjsRcj9FEvrXkH5BVhS1tuWbCyVFyrJQAzkvHBUO9kTcOuxQ+iwT4LR3
 // ==/UserScript==
 
 (function () {

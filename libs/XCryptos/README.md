@@ -2,25 +2,27 @@
 
 ## 目录
 
-- [简介](#简介)
-- [特性](#特性)
-- [安装与引入](#安装与引入)
-  - [脚本猫](#脚本猫)
-  - [直接引入](#直接引入)
-  - [Node.js](#nodejs)
-  - [AMD](#amd)
-- [快速开始](#快速开始)
-- [配置选项](#配置选项)
-- [API 参考](#api-参考)
-  - [MD5 哈希](#md5-哈希)
-  - [HMAC-MD5](#hmac-md5)
-  - [WebCrypto Hash](#webcrypto-hash)
-  - [自检测试](#自检测试)
-  - [配置方法](#配置方法)
-- [输出格式说明](#输出格式说明)
-- [浏览器兼容](#浏览器兼容)
-- [版本历史](#版本历史)
-- [许可证](#许可证)
+- [XCryptos - MD5 / HMAC-MD5 / WebCrypto Hash 加密工具库](#xcryptos---md5--hmac-md5--webcrypto-hash-加密工具库)
+  - [目录](#目录)
+  - [简介](#简介)
+  - [特性](#特性)
+  - [安装与引入](#安装与引入)
+    - [脚本猫](#脚本猫)
+    - [直接引入](#直接引入)
+    - [Node.js](#nodejs)
+    - [AMD](#amd)
+  - [快速开始](#快速开始)
+  - [配置选项](#配置选项)
+  - [API 参考](#api-参考)
+    - [MD5 哈希](#md5-哈希)
+    - [HMAC-MD5](#hmac-md5)
+    - [WebCrypto Hash](#webcrypto-hash)
+    - [自检测试](#自检测试)
+    - [配置方法](#配置方法)
+  - [输出格式说明](#输出格式说明)
+  - [浏览器兼容](#浏览器兼容)
+  - [版本历史](#版本历史)
+  - [许可证](#许可证)
 
 ---
 
@@ -49,7 +51,7 @@ XCryptos 是一个纯 JavaScript 实现的加密工具库，无任何外部依�
 ```javascript
 // ==UserScript==
 // @name         我的脚本
-// @require      https://scriptcat.org/lib/xxxx/XCryptos.js
+// @require      https://scriptcat.org/lib/6772/1.0.0/XCryptos.js?sha384-3391l45K1ezgTV2RV2X7Y10V7G5klii49+M+Y8rH3SO7qGuazNnTgdZiDgEwN10Q
 // ==/UserScript==
 
 (function () {
