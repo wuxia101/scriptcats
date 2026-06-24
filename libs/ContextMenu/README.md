@@ -4,33 +4,35 @@
 
 ## 目录
 
-- [特性](#特性)
-- [安装与引入](#安装与引入)
-  - [脚本猫](#脚本猫)
-  - [直接引入](#直接引入)
-  - [Node.js](#nodejs)
-  - [AMD](#amd)
-- [快速开始](#快速开始)
-- [构造函数](#构造函数)
-- [API 文档](#api-文档)
-  - [register](#registerconfig)
-  - [divider](#divider)
-  - [submenu](#submenutext-callback)
-  - [show](#showx-y)
-  - [hide](#hide)
-  - [clear](#clear)
-  - [update](#updateid-updates)
-  - [remove](#removeid)
-  - [getClipboardText](#getclipboardtext)
-  - [destroy](#destroy)
-- [MenuInfo 对象](#menuinfo-对象)
-- [示例代码](#示例代码)
-  - [基础用法](#基础用法)
-  - [条件显示](#条件显示)
-  - [禁用菜单项](#禁用菜单项)
-- [键盘快捷键](#键盘快捷键)
-- [浏览器兼容](#浏览器兼容)
-- [许可证](#许可证)
+- [ContextMenu.js - 右键上下文菜单组件库](#contextmenujs---右键上下文菜单组件库)
+  - [目录](#目录)
+  - [特性](#特性)
+  - [安装与引入](#安装与引入)
+    - [脚本猫](#脚本猫)
+    - [直接引入](#直接引入)
+    - [Node.js](#nodejs)
+    - [AMD](#amd)
+  - [快速开始](#快速开始)
+  - [构造函数](#构造函数)
+  - [API 文档](#api-文档)
+    - [register(config)](#registerconfig)
+    - [divider()](#divider)
+    - [submenu(text, callback)](#submenutext-callback)
+    - [show(x, y)](#showx-y)
+    - [hide()](#hide)
+    - [clear()](#clear)
+    - [update(id, updates)](#updateid-updates)
+    - [remove(id)](#removeid)
+    - [getClipboardText()](#getclipboardtext)
+    - [destroy()](#destroy)
+  - [MenuInfo 对象](#menuinfo-对象)
+  - [示例代码](#示例代码)
+    - [基础用法](#基础用法)
+    - [条件显示](#条件显示)
+    - [禁用菜单项](#禁用菜单项)
+  - [键盘快捷键](#键盘快捷键)
+  - [浏览器兼容](#浏览器兼容)
+  - [许可证](#许可证)
 
 ---
 
@@ -51,7 +53,7 @@
 ```javascript
 // ==UserScript==
 // @name         我的脚本
-// @require      https://scriptcat.org/lib/xxxx/ContextMenu.js
+// @require      https://scriptcat.org/lib/6773/1.0.0/ContextMenu.js?sha384-mdmVdKGRRasmncKLqEoD+xJ1hr5NUpkR70c3V8/8kaQ/SJFc1wDkzQq2oVEDXiwp
 // ==/UserScript==
 
 (function () {

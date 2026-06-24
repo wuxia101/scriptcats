@@ -4,15 +4,17 @@
 
 ## 目录
 
-- [用户脚本](#用户脚本)
-- [工具库 (libs)](#工具库-libs)
-  - [XUtils](#xutils)
-  - [XHooks](#xhooks)
-  - [XCryptos](#xcryptos)
-  - [TextSelectionToolbar](#textselectiontoolbar)
-- [Agent Skills](#agent-skills)
-- [项目结构](#项目结构)
-- [许可证](#许可证)
+- [ScriptCats](#scriptcats)
+  - [目录](#目录)
+  - [用户脚本](#用户脚本)
+  - [工具库 (libs)](#工具库-libs)
+    - [XUtils](#xutils)
+    - [XHooks](#xhooks)
+    - [XCryptos](#xcryptos)
+    - [TextSelectionToolbar](#textselectiontoolbar)
+  - [Agent Skills](#agent-skills)
+  - [项目结构](#项目结构)
+  - [许可证](#许可证)
 
 ---
 
@@ -22,6 +24,7 @@
 |------|------|------|
 | [OPFS 文件上传助手](https://scriptcat.org/zh-CN/script-show-page/6298) | 通过脚本猫菜单上传文件或文件夹到 OPFS 目录，带美观 UI 界面 | [安装](https://scriptcat.org/zh-CN/script-show-page/6298) |
 | [脚本猫发布生成描述助手](https://scriptcat.org/zh-CN/script-show-page/6297) | 在 ScriptCat 发布脚本时，自动根据代码生成描述和更新日志 | [安装](https://scriptcat.org/zh-CN/script-show-page/6297) |
+| [SingBox 订阅解析器](https://scriptcat.org/en/script-show-page/6774) | 在 ScriptCat 发布脚本时，自动根据代码生成描述和更新日志 | [安装](https://scriptcat.org/en/script-show-page/6774) |
 
 ## 工具库 (libs)
 
