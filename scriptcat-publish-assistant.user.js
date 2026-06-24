@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         ScriptCat 自动生成描述助手
 // @namespace    https://scriptcat.org/
-// @version      0.4.0
+// @version      0.4.1
 // @description  在 ScriptCat 发布脚本时，自动根据脚本代码生成描述和更新日志
 // @author       wuxia
-// @match        https://scriptcat.org/zh-CN/scripts/create*
-// @match        https://scriptcat.org/zh-CN/scripts/edit/*
-// @match        https://scriptcat.org/zh-CN/script-show-page/*/update
+// @match        https://scriptcat.org/**/scripts/create*
+// @match        https://scriptcat.org/**/scripts/edit/*
+// @match        https://scriptcat.org/**/script-show-page/*/update
 // @grant        CAT.agent.conversation
 // @run-at       document-idle
 // @icon         
@@ -41,12 +41,7 @@ function createGenerateButtons() {
             return false;
         }
 
-        // submit 外层 .ant-space-item
-        const submitWrapper = submitBtn.closest('.ant-space-item');
 
-        if (!submitWrapper || !submitWrapper.parentNode) {
-            return false;
-        }
 
         // 创建两个按钮
         const buttons = [
@@ -55,10 +50,6 @@ function createGenerateButtons() {
         ];
 
         buttons.forEach((btnConfig, index) => {
-            // 创建 ant-space-item
-            const aiWrapper = document.createElement('div');
-            aiWrapper.className = 'ant-space-item';
-            aiWrapper.id = `${btnConfig.id}-wrapper`;
 
             // 创建按钮
             const button = document.createElement('button');
@@ -76,10 +67,8 @@ function createGenerateButtons() {
 
             button.addEventListener('click', btnConfig.handler);
 
-            aiWrapper.appendChild(button);
-
             // 插入 submit 左边
-            submitWrapper.parentNode.insertBefore(aiWrapper, submitWrapper);
+            submitBtn.parentNode.insertBefore(button, submitBtn);
         });
 
         console.log('AI 按钮插入成功');
