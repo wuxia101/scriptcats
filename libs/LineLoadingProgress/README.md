@@ -4,24 +4,26 @@
 
 ## 目录
 
-- [简介](#简介)
-- [特性](#特性)
-- [安装与引入](#安装与引入)
-  - [脚本猫](#脚本猫)
-  - [直接引入](#直接引入)
-  - [Node.js](#nodejs)
-  - [AMD](#amd)
-- [快速开始](#快速开始)
-- [配置选项](#配置选项)
-- [API 参考](#api-参考)
-- [示例代码](#示例代码)
-  - [基础用法](#基础用法)
-  - [自定义样式](#自定义样式)
-  - [手动控制进度](#手动控制进度)
-  - [配合异步请求](#配合异步请求)
-- [浏览器兼容](#浏览器兼容)
-- [版本历史](#版本历史)
-- [许可证](#许可证)
+- [LineLoadingProgress - 页面顶部加载进度条组件](#lineloadingprogress---页面顶部加载进度条组件)
+  - [目录](#目录)
+  - [简介](#简介)
+  - [特性](#特性)
+  - [安装与引入](#安装与引入)
+    - [脚本猫](#脚本猫)
+    - [直接引入](#直接引入)
+    - [Node.js](#nodejs)
+    - [AMD](#amd)
+  - [快速开始](#快速开始)
+  - [配置选项](#配置选项)
+  - [API 参考](#api-参考)
+  - [示例代码](#示例代码)
+    - [基础用法](#基础用法)
+    - [自定义样式](#自定义样式)
+    - [手动控制进度](#手动控制进度)
+    - [配合异步请求](#配合异步请求)
+  - [浏览器兼容](#浏览器兼容)
+  - [版本历史](#版本历史)
+  - [许可证](#许可证)
 
 ---
 
@@ -45,7 +47,7 @@ LineLoadingProgress 是一个零依赖的页面顶部加载进度条组件。使
 ```javascript
 // ==UserScript==
 // @name         我的脚本
-// @require      https://scriptcat.org/lib/xxxx/LineLoadingProgress.js
+// @require      // @require https://scriptcat.org/lib/6778/1.0.0/LineLoadingProgress.js?sha384-gqSe2bIi84WjDuED2nD9xHWuxy+H/bNmSUTx7CxN2NlaW1uo12XFRv6sK0IV327L
 // ==/UserScript==
 
 (function () {
