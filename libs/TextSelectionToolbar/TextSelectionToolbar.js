@@ -9,7 +9,7 @@
  * - 支持事件监听
  * - 完美销毁，不污染 DOM
  * 
- * @version 1.1.0
+ * @version 1.0.2
  * @author ScriptCat
  */
 
@@ -96,19 +96,20 @@ class TextSelectionToolbar {
       .text-toolbar::before {
         content: '';
         position: absolute;
-        bottom: -6px;
+        top: -6px;
         left: 50%;
         transform: translateX(-50%);
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
-        border-top: 6px solid #fff;
-        filter: drop-shadow(0 2px 2px rgba(0,0,0,0.05));
+        border-bottom: 6px solid #fff;
+        filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.05));
       }
       .text-toolbar.align-bottom::before {
-        bottom: auto;
-        top: -6px;
-        border-top: none;
-        border-bottom: 6px solid #fff;
+        top: auto;
+        bottom: -6px;
+        border-bottom: none;
+        border-top: 6px solid #fff;
+        filter: drop-shadow(0 2px 2px rgba(0,0,0,0.05));
       }
       .text-toolbar-btn {
         display: inline-flex;
