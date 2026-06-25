@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AI 选择工具栏
 // @namespace    https://scriptcat.org/
-// @version      1.0.0
+// @version      1.0.1
 // @description  选中文本后显示可配置的 AI 工具栏：问问AI、复制、翻译、朗读、总结
 // @author       wuxia
 // @match        http://*/*
