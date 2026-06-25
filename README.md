@@ -25,6 +25,11 @@
 | [OPFS 文件上传助手](https://scriptcat.org/zh-CN/script-show-page/6298) | 通过脚本猫菜单上传文件或文件夹到 OPFS 目录，带美观 UI 界面 | [安装](https://scriptcat.org/zh-CN/script-show-page/6298) |
 | [脚本猫发布生成描述助手](https://scriptcat.org/zh-CN/script-show-page/6297) | 在 ScriptCat 发布脚本时，自动根据代码生成描述和更新日志 | [安装](https://scriptcat.org/zh-CN/script-show-page/6297) |
 | [SingBox 订阅解析器](https://scriptcat.org/en/script-show-page/6774) | 在 ScriptCat 发布脚本时，自动根据代码生成描述和更新日志 | [安装](https://scriptcat.org/en/script-show-page/6774) |
+| [AI 会话面板(智能猫)](https://scriptcat.org/en/script-show-page/6780) | 单文件 ScriptCat AI Agent 面板，支持页面内唤起、发送上下文、复制结果和本地配置 | [安装](https://scriptcat.org/en/script-show-page/6780) |
+| [AI 选择工具栏](https://scriptcat.org/en/script-show-page/6787) | 选中文本后显示可配置的 AI 工具栏：问问AI、复制、翻译、朗读、总结 | [安装](https://scriptcat.org/en/script-show-page/6787) |
+
+
+
 
 ## 工具库 (libs)
 

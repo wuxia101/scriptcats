@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name         AI Selection Toolbar
-// @namespace    scriptcat-ai-toolbar
+// @name         AI 选择工具栏
+// @namespace    https://scriptcat.org/
 // @version      1.0.0
 // @description  选中文本后显示可配置的 AI 工具栏：问问AI、复制、翻译、朗读、总结
-// @author       ScriptCat
-// @match        *://*/*
+// @author       wuxia
+// @match        http://*/*
+// @match        https://*/*
 // @run-at       document-idle
 // @grant        GM_setValue
 // @grant        GM_getValue

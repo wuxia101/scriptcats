@@ -1,16 +1,17 @@
 // ==UserScript==
-// @name         智能猫 SmartCat
+// @name         AI 会话面板(智能猫)
 // @namespace    https://scriptcat.org/
 // @version      0.1.0
 // @description  单文件 ScriptCat AI Agent 面板，支持页面内唤起、发送上下文、复制结果和本地配置
 // @author       wuxia
-// @match        *://*/*
+// @match        http://*/*
+// @match        https://*/*
 // @grant        GM_registerMenuCommand
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_setClipboard
 // @grant        CAT.agent.conversation
-// @icon        https://scriptcat.org/_next/image?url=%2Fassets%2Flogo.png&w=64&q=75
+// @icon         https://scriptcat.org/_next/image?url=%2Fassets%2Flogo.png&w=64&q=75
 // @run-at       document-idle
 // ==/UserScript==
 
