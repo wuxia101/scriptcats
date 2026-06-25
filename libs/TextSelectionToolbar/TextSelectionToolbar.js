@@ -9,7 +9,7 @@
  * - 支持事件监听
  * - 完美销毁，不污染 DOM
  * 
- * @version 1.0.0
+ * @version 1.1.0
  * @author ScriptCat
  */
 
@@ -29,6 +29,7 @@ class TextSelectionToolbar {
       offsetX: 0,                // 水平偏移
       offsetY: 10,               // 垂直偏移（相对于选区）
       zIndex: 10000,             // 层级
+      showTitle: false,          // 全局默认：是否在按钮上显示 title 文字
       ...options
     };
 
@@ -125,6 +126,7 @@ class TextSelectionToolbar {
         font-size: 14px;
         transition: all 0.2s ease;
         font-family: inherit;
+        white-space: nowrap;
       }
       .text-toolbar-btn:hover {
         background: #f0f2f5;
@@ -138,6 +140,26 @@ class TextSelectionToolbar {
         width: 18px;
         height: 18px;
         fill: currentColor;
+      }
+      .text-toolbar-btn-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .text-toolbar-btn-icon svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+      .text-toolbar-btn-with-title {
+        gap: 4px;
+        padding: 0 12px;
+      }
+      .text-toolbar-btn-title {
+        font-size: 13px;
+        line-height: 1;
+        margin-left: 2px;
       }
       .text-toolbar-divider {
         width: 1px;
@@ -379,7 +401,7 @@ class TextSelectionToolbar {
 
     // 获取工具栏尺寸
     const toolbarRect = this.toolbar.getBoundingClientRect();
-    const toolbarWidth = 40 + this.buttons.length * 46; // 估算宽度
+    const toolbarWidth = this._estimateToolbarWidth();
     const toolbarHeight = 48;
 
     // 视口尺寸
@@ -433,7 +455,7 @@ class TextSelectionToolbar {
     const scrollX = window.scrollX;
     const scrollY = window.scrollY;
 
-    const toolbarWidth = 40 + this.buttons.length * 46;
+    const toolbarWidth = this._estimateToolbarWidth();
     const toolbarHeight = 48;
 
     // 居中定位
@@ -454,6 +476,19 @@ class TextSelectionToolbar {
     }
 
     return { x, y, alignBottom: false };
+  }
+
+  /**
+   * 估算工具栏宽度（用于位置计算）
+   */
+  _estimateToolbarWidth() {
+    const btnWidths = this.buttons.map(b => {
+      if (b.showTitle && b.title) {
+        return 46 + b.title.length * 10;
+      }
+      return 46;
+    });
+    return 12 + btnWidths.reduce((sum, w) => sum + w + 4, 0);
   }
 
   /**
@@ -505,7 +540,8 @@ class TextSelectionToolbar {
    * @param {Object} config - 按钮配置
    * @param {string} config.id - 按钮唯一 ID
    * @param {string|HTMLElement} config.icon - 按钮图标（支持 SVG、emoji、HTML）
-   * @param {string} config.title - 按钮标题（hover 时显示）
+   * @param {string} config.title - 按钮标题（hover 时显示，showTitle 为 true 时在按钮内显示）
+   * @param {boolean} config.showTitle - 是否在按钮上同时显示 title 文字，默认跟随全局 options.showTitle
    * @param {Function} config.action - 点击回调函数，参数为 {text, selection, range}
    */
   registerButton(config) {
@@ -518,6 +554,7 @@ class TextSelectionToolbar {
       id: config.id,
       icon: config.icon || '',
       title: config.title || config.id,
+      showTitle: config.showTitle !== undefined ? config.showTitle : this.options.showTitle,
       action: config.action || (() => {})
     };
 
@@ -704,19 +741,39 @@ class TextSelectionToolbar {
     this.buttons.forEach(button => {
       const btn = document.createElement('button');
       btn.className = 'text-toolbar-btn';
+      if (button.showTitle && button.title) {
+        btn.classList.add('text-toolbar-btn-with-title');
+      }
       btn.dataset.buttonId = button.id;
       btn.title = button.title;
       btn.type = 'button';
       
-      // 支持 HTML/文本图标
-      if (typeof button.icon === 'string' && (
-        button.icon.startsWith('<svg') || 
-        button.icon.startsWith('<i') ||
-        button.icon.startsWith('<img')
-      )) {
-        btn.innerHTML = button.icon;
-      } else {
-        btn.textContent = button.icon;
+      // 渲染图标
+      const hasIcon = button.icon && button.icon !== '';
+      if (hasIcon) {
+        const iconEl = document.createElement('span');
+        iconEl.className = 'text-toolbar-btn-icon';
+        if (typeof button.icon === 'string' && (
+          button.icon.startsWith('<svg') || 
+          button.icon.startsWith('<i') ||
+          button.icon.startsWith('<img')
+        )) {
+          iconEl.innerHTML = button.icon;
+        } else {
+          iconEl.textContent = button.icon;
+        }
+        btn.appendChild(iconEl);
+      }
+
+      // 渲染标题文字（showTitle 为 true 时）
+      if (button.showTitle && button.title) {
+        const titleEl = document.createElement('span');
+        titleEl.className = 'text-toolbar-btn-title';
+        titleEl.textContent = button.title;
+        btn.appendChild(titleEl);
+      } else if (!hasIcon) {
+        // 无图标时用 title 作为内容
+        btn.textContent = button.title;
       }
 
       this.buttonContainer.appendChild(btn);

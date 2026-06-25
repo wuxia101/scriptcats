@@ -152,6 +152,7 @@ toolbar.destroy();
 | `offsetX` | number | `0` | 水平偏移量 |
 | `offsetY` | number | `10` | 垂直偏移量（相对于选区） |
 | `zIndex` | number | `10000` | 工具栏层级 |
+| `showTitle` | boolean | `false` | 全局默认是否在按钮上显示 title 文字（可被按钮级配置覆盖） |
 
 ## API 方法
 
@@ -198,8 +199,9 @@ toolbar.destroy();
 ```javascript
 {
   id: 'unique_id',        // 按钮唯一标识符（必填）
-  icon: '📌',             // 钮图标（支持 emoji、SVG、HTML）
-  title: '固定到顶部',    // 鼠标悬停时显示的提示文字
+  icon: '📌',             // 按钮图标（支持 emoji、SVG、HTML）
+  title: '固定到顶部',    // 鼠标悬停提示文字，showTitle 为 true 时在按钮内显示
+  showTitle: true,        // 是否在按钮上同时显示 title 文字，默认跟随全局 options.showTitle
   action: (selection) => { // 点击回调函数
     // selection 包含:
     // - text: 选中的文本内容
@@ -207,6 +209,32 @@ toolbar.destroy();
     // - range: 选区的 Range 对象
   }
 }
+```
+
+### icon + title 模式
+
+按钮支持同时显示图标和标题文字，使按钮含义更直观：
+
+```javascript
+// 全局开启 showTitle
+const toolbar = new TextSelectionToolbar({ showTitle: true });
+
+// 或按按钮单独控制
+toolbar.registerButton({
+  id: 'copy',
+  icon: '📋',
+  title: '复制',
+  showTitle: true,        // 此按钮显示 icon + title
+  action: (s) => navigator.clipboard.writeText(s.text)
+});
+
+toolbar.registerButton({
+  id: 'bold',
+  icon: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.94-4-4.37-4H7v14h7.04c2.1 0 3.96-1.73 3.96-3.87 0-1.54-.97-2.87-2.4-3.34z"/></svg>',
+  title: '加粗',
+  showTitle: true,        // SVG 图标 + title 文字
+  action: (s) => document.execCommand('bold')
+});
 ```
 
 ## 支持的事件
@@ -244,6 +272,16 @@ toolbar.destroy();
 /* 自定义分隔线样式 */
 .text-toolbar-divider {
   background: #ccc;
+}
+
+/* 自定义 icon + title 模式样式 */
+.text-toolbar-btn-with-title {
+  gap: 6px;
+  padding: 0 14px;
+}
+.text-toolbar-btn-title {
+  font-size: 12px;
+  color: #888;
 }
 ```
 
