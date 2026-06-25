@@ -83,8 +83,14 @@ declare class TextSelectionToolbar {
   /** 实例计数 */
   static instanceCount: number;
 
+  /** 单例映射：以监听容器标识为 key */
+  static _instanceMap: Map<string, TextSelectionToolbar>;
+
   /** 实例唯一 ID */
   id: string;
+
+  /** 单例 key */
+  _singletonKey: string;
 
   /** 配置选项 */
   options: ToolbarOptions;
@@ -117,7 +123,8 @@ declare class TextSelectionToolbar {
   eventListeners: Partial<Record<ToolbarEventName, Function[]>>;
 
   /**
-   * 创建工具栏实例
+   * 创建/获取工具栏单例。
+   * 同一 container（或全局）只允许一个实例，多次 new 返回已有实例并合并 options。
    * @param options - 配置选项
    */
   constructor(options?: ToolbarOptions);

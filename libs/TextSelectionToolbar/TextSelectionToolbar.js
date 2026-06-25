@@ -9,17 +9,41 @@
  * - 支持事件监听
  * - 完美销毁，不污染 DOM
  * 
- * @version 1.0.2
+ * @version 1.0.3
  * @author ScriptCat
  */
 
 class TextSelectionToolbar {
+  /** 实例计数 */
   static instanceCount = 0;
 
+  /** 单例映射：以监听容器标识为 key，确保同容器只有一个实例 */
+  static _instanceMap = new Map();
+
+  /**
+   * 获取单例实例。
+   * 同一 container（或全局）只允许存在一个工具栏实例，
+   * 多次 new 会返回已有实例并合并 options。
+   *
+   * @param {Object} options - 配置选项
+   * @returns {TextSelectionToolbar} 唯一实例
+   */
   constructor(options = {}) {
-    // 生成唯一 ID
+    // 计算单例 key：container 选择器或全局标记
+    const singletonKey = options.container || '__global__';
+
+    // 如果已有实例，合并 options 后返回
+    const existing = TextSelectionToolbar._instanceMap.get(singletonKey);
+    if (existing) {
+      // 合并新传入的配置项（不覆盖 buttons / eventListeners 等运行状态）
+      existing.setOptions(options);
+      return existing;
+    }
+
+    // 首次创建实例
     this.id = `text-toolbar-${++TextSelectionToolbar.instanceCount}`;
-    
+    this._singletonKey = singletonKey;
+
     // 配置
     this.options = {
       container: null,           // 监听文本选择的容器，默认整个文档
@@ -45,9 +69,17 @@ class TextSelectionToolbar {
 
     // 创建工具栏 DOM
     this._createToolbar();
-    
+
     // 绑定事件
     this._bindEvents();
+
+    // 注册到单例映射
+    TextSelectionToolbar._instanceMap.set(singletonKey, this);
+
+    // 同时挂到 window 上方便全局访问
+    if (singletonKey === '__global__') {
+      window.__textSelectionToolbar = this;
+    }
   }
 
   /**
@@ -809,6 +841,12 @@ class TextSelectionToolbar {
     this.buttons = [];
     this.currentSelection = null;
     this.eventListeners = {};
+
+    // 清理单例引用
+    TextSelectionToolbar._instanceMap.delete(this._singletonKey);
+    if (this._singletonKey === '__global__' && window.__textSelectionToolbar === this) {
+      delete window.__textSelectionToolbar;
+    }
 
     // 触发销毁事件
     this._emit('destroy');
