@@ -10,7 +10,7 @@
 // @grant        GM_setValue
 // @grant        GM_setClipboard
 // @grant        CAT.agent.conversation
-// @icon.        https://scriptcat.org/_next/image?url=%2Fassets%2Flogo.png&w=64&q=75
+// @icon        https://scriptcat.org/_next/image?url=%2Fassets%2Flogo.png&w=64&q=75
 // @run-at       document-idle
 // ==/UserScript==
 
