@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AI 会话面板(智能猫)
 // @namespace    https://scriptcat.org/
-// @version      0.1.0
+// @version      1.0.0
 // @description  单文件 ScriptCat AI Agent 面板，支持页面内唤起、发送上下文、复制结果和本地配置
 // @author       wuxia
 // @match        http://*/*
