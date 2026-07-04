@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CNBClient.js - 脚本猫 CNB API 客户端演示</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: #e8eaed;
+      padding: 40px 20px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 {
+      text-align: center;
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #00d4aa, #5c9cf5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { text-align: center; color: #8b919a; margin-bottom: 36px; font-size: 1rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; margin-bottom: 36px; flex-wrap: wrap; }
+    .badge {
+      padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;
+      background: rgba(92, 156, 245, 0.15); color: #5c9cf5;
+      border: 1px solid rgba(92, 156, 245, 0.25);
+    }
+    .demo-section {
+      background: rgba(20, 22, 38, 0.7); backdrop-filter: blur(12px);
+      border-radius: 16px; padding: 28px; margin-bottom: 28px;
+      border: 1px solid rgba(100, 120, 160, 0.18);
+    }
+    .demo-section h2 {
+      font-size: 1.2rem; margin-bottom: 18px; color: #00d4aa;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .demo-section h2::before {
+      content: ''; width: 4px; height: 20px; background: #00d4aa; border-radius: 2px;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 0.82rem; color: #9aa0b0; font-weight: 500; }
+    .form-group input, .form-group textarea, .form-group select {
+      padding: 10px 14px; border-radius: 8px;
+      border: 1px solid rgba(100, 120, 160, 0.3);
+      background: rgba(15, 17, 30, 0.6); color: #e8eaed;
+      font-size: 0.9rem; font-family: inherit; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none; border-color: #00d4aa;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .btn {
+      padding: 10px 24px; border-radius: 8px; border: none;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; font-family: inherit;
+    }
+    .btn-primary { background: linear-gradient(135deg, #00d4aa, #00b894); color: #0a0e27; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0, 212, 170, 0.35); }
+    .btn-secondary { background: rgba(92, 156, 245, 0.15); color: #5c9cf5; border: 1px solid rgba(92, 156, 245, 0.25); }
+    .btn-secondary:hover { background: rgba(92, 156, 245, 0.25); }
+    .btn-danger { background: rgba(245, 87, 108, 0.15); color: #f5576c; border: 1px solid rgba(245, 87, 108, 0.25); }
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .output {
+      background: rgba(15, 17, 30, 0.8); border-radius: 8px; padding: 16px;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.82rem; max-height: 300px; overflow-y: auto;
+      white-space: pre-wrap; word-break: break-all;
+      border: 1px solid rgba(100, 120, 160, 0.2); color: #b0b8c8;
+    }
+    .output.success { border-color: rgba(0, 212, 170, 0.4); }
+    .output.error { border-color: rgba(245, 87, 108, 0.4); color: #f5576c; }
+    .token-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+    }
+    .token-status.ok { background: rgba(0, 212, 170, 0.12); color: #00d4aa; }
+    .token-status.no { background: rgba(245, 87, 108, 0.12); color: #f5576c; }
+    .token-status .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    .token-status.ok .dot { background: #00d4aa; }
+    .token-status.no .dot { background: #f5576c; }
+    .quick-examples { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 16px; }
+    .quick-card {
+      background: rgba(15, 17, 30, 0.6); border-radius: 10px; padding: 16px;
+      border: 1px solid rgba(100, 120, 160, 0.15); cursor: pointer; transition: all 0.2s;
+    }
+    .quick-card:hover { border-color: rgba(0, 212, 170, 0.35); background: rgba(0, 212, 170, 0.05); }
+    .quick-card .icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .quick-card h3 { font-size: 0.92rem; margin-bottom: 4px; }
+    .quick-card p { font-size: 0.78rem; color: #6b7280; }
+    .info-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .info-row .label { color: #6b7280; font-size: 0.82rem; }
+    .info-row .value { font-weight: 600; font-size: 0.85rem; }
+    @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CNBClient</h1>
+    <p class="subtitle">脚本猫 CNB API 客户端库 - 浏览器演示</p>
+    <div class="badge-row">
+      <span class="badge">v1.0.0</span>
+      <span class="badge">UMD</span>
+      <span class="badge">Zero Deps</span>
+      <span class="badge">CNB OpenAPI</span>
+    </div>
+
+    <!-- Token 管理 -->
+    <div class="demo-section">
+      <h2>Token 管理</h2>
+      <div class="info-row">
+        <span class="label">状态:</span>
+        <span class="token-status" id="tokenStatus">
+          <span class="dot"></span>
+          <span id="tokenStatusText">未配置</span>
+        </span>
+      </div>
+      <div class="info-row">
+        <span class="label">默认仓库:</span>
+        <span class="value" id="defaultRepo">cnb/npc</span>
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 12px;">
+        <input type="password" id="tokenInput" placeholder="粘贴你的 CNB Access Token" style="flex:1;" />
+        <button class="btn btn-primary" onclick="saveToken()">保存 Token</button>
+        <button class="btn btn-danger" onclick="clearToken()">清除</button>
+      </div>
+    </div>
+
+    <!-- 创建 Issue -->
+    <div class="demo-section">
+      <h2>创建 Issue</h2>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>标题 *</label>
+          <input type="text" id="issueTitle" placeholder="Issue 标题（必填）" value="测试脚本猫 CNBClient 库" />
+        </div>
+        <div class="form-group full">
+          <label>内容 (Markdown)</label>
+          <textarea id="issueBody" placeholder="描述问题或需求...">## 测试内容
+
+这是一个通过 CNBClient 库创建的测试 Issue。</textarea>
+        </div>
+        <div class="form-group">
+          <label>优先级</label>
+          <select id="issuePriority">
+            <option value="">无</option>
+            <option value="-2P">-2P</option>
+            <option value="-1P">-1P</option>
+            <option value="P0">P0</option>
+            <option value="P1">P1</option>
+            <option value="P2">P2</option>
+            <option value="P3">P3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>标签（逗号分隔，最多10个）</label>
+          <input type="text" id="issueLabels" placeholder="bug, frontend" value="test" />
+        </div>
+        <div class="form-group">
+          <label>处理人（逗号分隔，最多8个）</label>
+          <input type="text" id="issueAssignees" placeholder="zhangsan, lisi" />
+        </div>
+        <div class="form-group">
+          <label>仓库（留空用默认）</label>
+          <input type="text" id="issueRepo" placeholder="cnb/npc" />
+        </div>
+        <div class="form-group">
+          <label>开始日期</label>
+          <input type="date" id="issueStartDate" />
+        </div>
+        <div class="form-group">
+          <label>结束日期</label>
+          <input type="date" id="issueEndDate" />
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitIssue()">创建 Issue</button>
+        <button class="btn btn-secondary" onclick="submitMinimalIssue()">仅标题创建</button>
+        <button class="btn btn-secondary" onclick="testValidation()">测试校验</button>
+      </div>
+    </div>
+
+    <!-- 快速场景 -->
+    <div class="demo-section">
+      <h2>快速场景</h2>
+      <div class="quick-examples">
+        <div class="quick-card" onclick="quickBug()">
+          <div class="icon">Bug</div>
+          <h3>Bug 报告</h3>
+          <p>带标签和优先级</p>
+        </div>
+        <div class="quick-card" onclick="quickFeature()">
+          <div class="icon">Feature</div>
+          <h3>功能需求</h3>
+          <p>高优先级新功能</p>
+        </div>
+        <div class="quick-card" onclick="quickTask()">
+          <div class="icon">Task</div>
+          <h3>任务分配</h3>
+          <p>指定处理人和日期</p>
+        </div>
+        <div class="quick-card" onclick="quickSecret()">
+          <div class="icon">Secret</div>
+          <h3>私有备忘</h3>
+          <p>不可见 + 工作模式</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 输出 -->
+    <div class="demo-section">
+      <h2>输出</h2>
+      <div class="output" id="output">等待操作...</div>
+    </div>
+  </div>
+
+  <script src="cnbclient.js"></script>
+  <script>
+    // ─── Mock GM API ────────────────────────────────────────
+    if (typeof GM_getValue === 'undefined') {
+      window.GM_getValue = function (key, def) {
+        try {
+          var v = localStorage.getItem('cnb_' + key);
+          return v !== null ? JSON.parse(v) : (def !== undefined ? def : null);
+        } catch (e) { return def !== undefined ? def : null; }
+      };
+    }
+    if (typeof GM_setValue === 'undefined') {
+      window.GM_setValue = function (key, val) {
+        try { localStorage.setItem('cnb_' + key, JSON.stringify(val)); }
+        catch (e) { console.warn('GM_setValue mock fail:', e); }
+      };
+    }
+
+    // ─── UI Helpers ────────────────────────────────────────
+    var $out = document.getElementById('output');
+
+    function log(msg, isErr) {
+      var ts = new Date().toLocaleTimeString();
+      $out.textContent = '[' + ts + '] ' + msg;
+      $out.className = 'output ' + (isErr ? 'error' : 'success');
+      if (isErr) console.error(msg); else console.log(msg);
+    }
+
+    function updateStatus() {
+      var has = CNBClient.hasToken();
+      var st = document.getElementById('tokenStatus');
+      var txt = document.getElementById('tokenStatusText');
+      if (has) { st.className = 'token-status ok'; txt.textContent = '已配置'; }
+      else { st.className = 'token-status no'; txt.textContent = '未配置'; }
+      document.getElementById('defaultRepo').textContent = CNBClient.getDefaultRepo();
+    }
+
+    function parseCSV(s) {
+      if (!s || !s.trim()) return [];
+      return s.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+    }
+
+    function saveToken() {
+      var t = document.getElementById('tokenInput').value.trim();
+      if (!t) { log('请输入 Token', true); return; }
+      CNBClient.setToken(t);
+      document.getElementById('tokenInput').value = '';
+      updateStatus();
+      log('Token 已保存');
+    }
+
+    function clearToken() {
+      CNBClient.clearToken();
+      updateStatus();
+      log('Token 已清除');
+    }
+
+    function getFormOpts() {
+      var o = {
+        title: document.getElementById('issueTitle').value.trim(),
+        body: document.getElementById('issueBody').value.trim(),
+        labels: parseCSV(document.getElementById('issueLabels').value),
+        assignees: parseCSV(document.getElementById('issueAssignees').value),
+        startDate: document.getElementById('issueStartDate').value || undefined,
+        endDate: document.getElementById('issueEndDate').value || undefined,
+      };
+      var p = document.getElementById('issuePriority').value;
+      if (p) o.priority = p;
+      var r = document.getElementById('issueRepo').value.trim();
+      if (r) o.repo = r;
+      return o;
+    }
+
+    function submitIssue() {
+      var opts = getFormOpts();
+      if (!opts.title) { log('请输入标题', true); return; }
+      log('正在创建 Issue...');
+      CNBClient.createIssue(opts).then(function (r) {
+        log('Issue #' + r.number + ' ' + r.title + '\n链接: ' + r.url + '\n作者: ' + (r.author || 'N/A') + '\n状态: ' + r.state);
+      }).catch(function (e) { log(e.message, true); });
+    }
+
+    function submitMinimalIssue() {
+      var t = document.getElementById('issueTitle').value.trim();
+      log('最简创建: ' + t + ' ...');
+      CNBClient.createIssue({ title: t }).then(function (r) {
+        log('Issue #' + r.number + ' ' + r.title + '\n链接: ' + r.url);
+      }).catch(function (e) { log(e.message, true); });
+    }
+
+    function testValidation() {
+      var tests = [
+        function () { return CNBClient.createIssue({ title: '' }); },
+        function () { return CNBClient.createIssue({ title: 't', priority: 'P99' }); },
+        function () { return CNBClient.createIssue({ title: 't', assignees: '1,2,3,4,5,6,7,8,9'.split(',') }); },
+      ];
+      runTests(tests, 0);
+    }
+
+    function runTests(tests, i) {
+      if (i >= tests.length) { log('校验测试全部通过'); return; }
+      tests[i]().then(function () {
+        log('Test ' + (i + 1) + ' FAIL: should have thrown', true);
+      }).catch(function (e) {
+        log('Test ' + (i + 1) + ' OK: ' + e.message);
+        setTimeout(function () { runTests(tests, i + 1); }, 300);
+      });
+    }
+
+    // ─── Quick Scenarios ───────────────────────────────────
+    function quickBug() {
+      CNBClient.createIssue({
+        title: '[Bug] 页面响应式适配异常',
+        body: '## 问题\n移动端布局错乱\n\n## 环境\niOS Safari 17',
+        labels: ['bug'],
+        priority: 'P1',
+      }).then(function (r) { log('Bug #' + r.number + '\n链接: ' + r.url); })
+        .catch(function (e) { log(e.message, true); });
+    }
+
+    function quickFeature() {
+      CNBClient.createIssue({
+        title: '[Feature] 添加暗色模式支持',
+        body: '## 需求\n支持系统级暗色模式切换\n\n## 方案\nCSS 变量 + prefers-color-scheme',
+        labels: ['feature', 'frontend'],
+        priority: 'P2',
+      }).then(function (r) { log('Feature #' + r.number + '\n链接: ' + r.url); })
+        .catch(function (e) { log(e.message, true); });
+    }
+
+    function quickTask() {
+      var today = new Date().toISOString().slice(0, 10);
+      var nextWeek = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10);
+      CNBClient.createIssue({
+        title: '[Task] 代码评审与重构',
+        body: '## 范围\n重构 user 模块\n\n## 标准\n通过所有单元测试',
+        labels: ['task', 'refactor'],
+        priority: 'P1',
+        startDate: today,
+        endDate: nextWeek,
+        workMode: true,
+      }).then(function (r) { log('Task #' + r.number + '\n链接: ' + r.url); })
+        .catch(function (e) { log(e.message, true); });
+    }
+
+    function quickSecret() {
+      CNBClient.createIssue({
+        title: '[备忘] 技术方案调研记录',
+        body: '调研 GraphQL vs REST 性能对比\n\n---\n仅供个人参考',
+        invisible: true,
+        workMode: true,
+      }).then(function (r) { log('Secret #' + r.number + '\n链接: ' + r.url); })
+        .catch(function (e) { log(e.message, true); });
+    }
+
+    // ─── Init ──────────────────────────────────────────────
+    updateStatus();
+
+    // 如果已有 Token，自动填入（方便演示，不是明文显示）
+    if (CNBClient.hasToken()) {
+      document.getElementById('tokenInput').placeholder = 'Token 已配置，可直接创建 Issue';
+    }
+  </script>
+</body>
+</html>

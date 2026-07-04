@@ -122,39 +122,58 @@
   ];
 
   /**
-   * 使用 WebCrypto API 计算哈希，不可用时降级为非加密 hash
+   * 使用 jsSHA 或 WebCrypto API 计算哈希，多层降级保证一定成功
+   *
+   * 优先级: jsSHA (纯JS) → WebCrypto (浏览器原生) → fallback (简单hash)
+   *
+   * 依赖: jsSHA 通过 @require 引入，不存在时自动降级
    *
    * @param {string} text - 输入文本
    * @param {string} [algorithm='SHA-256'] - 哈希算法，支持 SHA-1 / SHA-256 / SHA-384 / SHA-512
-   * @returns {Promise<string>} 哈希字符串（hex 格式）；降级时返回 'fallback_' + 数字哈希
+   * @returns {Promise<string>} 哈希字符串（hex 格式）；最终兜底时返回 'fallback_' + 数字哈希
    */
   async function computeHash(text, algorithm) {
     if (algorithm === undefined) algorithm = 'SHA-256';
 
-    var cryptoObj = globalThis.crypto || (typeof window !== 'undefined' ? window.crypto : null);
-
-    if (!cryptoObj || !cryptoObj.subtle || !cryptoObj.subtle.digest) {
-      console.warn('crypto.subtle 不可用，降级为普通hash');
-
-      // 降级 hash（非加密，仅用于非安全场景）
-      var hash = 0;
-      for (var i = 0; i < text.length; i++) {
-        var chr = text.charCodeAt(i);
-        hash = ((hash << 5) - hash) + chr;
-        hash |= 0;
+    // 1. 优先使用 jsSHA（纯 JS 实现，不依赖环境，保证一定成功）
+    if (typeof jsSHA !== 'undefined') {
+      try {
+        var shaObj = new jsSHA(algorithm, 'TEXT');
+        shaObj.update(text);
+        return shaObj.getHash('HEX');
+      } catch (e) {
+        console.warn('jsSHA 计算失败: ' + (e && e.message) + '，降级尝试 WebCrypto');
       }
-
-      return 'fallback_' + Math.abs(hash);
     }
 
-    var encoder = new TextEncoder();
-    var data = encoder.encode(text);
+    // 2. 降级为 WebCrypto API
+    var cryptoObj = globalThis.crypto || (typeof window !== 'undefined' ? window.crypto : null);
 
-    var hashBuffer = await cryptoObj.subtle.digest(algorithm, data);
+    if (cryptoObj && cryptoObj.subtle && cryptoObj.subtle.digest) {
+      try {
+        var encoder = new TextEncoder();
+        var data = encoder.encode(text);
+        var hashBuffer = await cryptoObj.subtle.digest(algorithm, data);
 
-    return Array.from(new Uint8Array(hashBuffer))
-      .map(function (b) { return b.toString(16).padStart(2, '0'); })
-      .join('');
+        return Array.from(new Uint8Array(hashBuffer))
+          .map(function (b) { return b.toString(16).padStart(2, '0'); })
+          .join('');
+      } catch (e) {
+        console.warn('WebCrypto 计算失败: ' + (e && e.message) + '，降级为普通hash');
+      }
+    }
+
+    // 3. 最后兜底：简单哈希（非加密安全，仅保证不报错）
+    console.warn('jsSHA 和 WebCrypto 均不可用，使用 fallback 普通hash');
+
+    var hash = 0;
+    for (var i = 0; i < text.length; i++) {
+      var chr = text.charCodeAt(i);
+      hash = ((hash << 5) - hash) + chr;
+      hash |= 0;
+    }
+
+    return 'fallback_' + Math.abs(hash);
   }
 
   // ─── MD5 核心算法 ───────────────────────────────────────
