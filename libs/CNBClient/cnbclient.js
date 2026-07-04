@@ -12,6 +12,7 @@
  * 依赖 grants（宿主脚本需声明）:
  *   @grant GM_getValue
  *   @grant GM_setValue
+ *   @grant GM_xmlhttpRequest
  *   @connect api.cnb.cool
  *
  * @version 1.0.0
@@ -119,27 +120,42 @@
       }
     }
 
-    var fetchOpts = {
-      method: method,
-      headers: {
-        Authorization: 'Bearer ' + accessToken,
-        Accept: 'application/vnd.cnb.api+json',
-        'Content-Type': 'application/json',
-      },
-    };
+    return new Promise(function (resolve, reject) {
+      var xhrOpts = {
+        url: url,
+        method: method,
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+          Accept: 'application/vnd.cnb.api+json',
+          'Content-Type': 'application/json',
+        },
+        responseType: 'text',
+        onload: function (response) {
+          try {
+            var responseData = JSON.parse(response.responseText);
+            if (response.status < 200 || response.status >= 300) {
+              var errMsg = responseData.errmsg || responseData.message || ('HTTP ' + response.status);
+              reject(new Error('CNB API 请求失败: ' + errMsg));
+              return;
+            }
+            resolve(responseData);
+          } catch (e) {
+            reject(new Error('CNB API 响应解析失败: ' + e.message));
+          }
+        },
+        onerror: function (response) {
+          reject(new Error('CNB API 网络请求失败: HTTP ' + (response && response.status || 'unknown')));
+        },
+        ontimeout: function () {
+          reject(new Error('CNB API 请求超时'));
+        },
+      };
 
-    if (body) {
-      fetchOpts.body = JSON.stringify(body);
-    }
+      if (body) {
+        xhrOpts.data = JSON.stringify(body);
+      }
 
-    return fetch(url, fetchOpts).then(function (response) {
-      return response.json().then(function (responseData) {
-        if (!response.ok) {
-          var errMsg = responseData.errmsg || responseData.message || ('HTTP ' + response.status);
-          throw new Error('CNB API 请求失败: ' + errMsg);
-        }
-        return responseData;
-      });
+      GM_xmlhttpRequest(xhrOpts);
     });
   }
 
